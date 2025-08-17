@@ -9,19 +9,17 @@ const overlayMsg = document.getElementById("overlayMsg");
 const retryBtn = document.getElementById("retryBtn");
 const startBtn = document.getElementById("startBtn");
 
-let player, cars, keys, score, gameOver, gameWin, carInterval;
-let gameRunning = false; // NEW flag
+let player, cars, keys, score, carInterval;
+let gameRunning = false;
 
 function initGame() {
   player = { x: 180, y: 460, w: 40, h: 40, color: "#795548" };
   cars = [];
   keys = {};
   score = 0;
-  gameOver = false;
-  gameWin = false;
   gameRunning = true;
 
-  overlay.classList.add("hidden");
+  overlay.classList.add("hidden");   // ✅ betul² hide overlay
   scoreText.textContent = "Score: " + score;
 
   if (carInterval) clearInterval(carInterval);
@@ -55,7 +53,6 @@ function update() {
     scoreText.textContent = "Score: " + score;
 
     if (score >= 5) {
-      gameWin = true;
       endGame("🎉 YEAY! Kau Menang! 🎉");
     }
   }
@@ -77,7 +74,6 @@ function update() {
       player.y < car.y + car.h &&
       player.y + player.h > car.y
     ) {
-      gameOver = true;
       endGame("💀 GAME OVER 💀");
     }
   }
@@ -87,7 +83,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Jalan
-  ctx.fillStyle = "#b0bec5";
+  ctx.fillStyle = "#d7ccc8";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (!gameRunning) return;
@@ -97,7 +93,7 @@ function draw() {
   ctx.fillRect(player.x, player.y, player.w, player.h);
 
   // Cars
-  ctx.fillStyle = "red";
+  ctx.fillStyle = "#e53935";
   for (let car of cars) {
     ctx.fillRect(car.x, car.y, car.w, car.h);
   }
@@ -113,11 +109,11 @@ function endGame(msg) {
   clearInterval(carInterval);
   gameRunning = false;
   overlayMsg.textContent = msg;
-  overlay.classList.remove("hidden");
+  overlay.classList.remove("hidden");  // ✅ show overlay bila habis
 }
 
 retryBtn.addEventListener("click", () => {
-  initGame();
+  initGame();   // restart balik
 });
 
 startBtn.addEventListener("click", () => {
