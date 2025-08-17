@@ -10,6 +10,7 @@ const retryBtn = document.getElementById("retryBtn");
 const startBtn = document.getElementById("startBtn");
 
 let player, cars, keys, score, gameOver, gameWin, carInterval;
+let gameRunning = false; // NEW flag
 
 function initGame() {
   player = { x: 180, y: 460, w: 40, h: 40, color: "#795548" };
@@ -18,16 +19,17 @@ function initGame() {
   score = 0;
   gameOver = false;
   gameWin = false;
+  gameRunning = true;
 
   overlay.classList.add("hidden");
   scoreText.textContent = "Score: " + score;
 
-  // clear interval kalau ada leftover
   if (carInterval) clearInterval(carInterval);
   carInterval = setInterval(spawnCar, 1500);
 }
 
 function spawnCar() {
+  if (!gameRunning) return;
   const y = Math.random() * 400;
   cars.push({ x: -60, y: y, w: 60, h: 30, speed: 2 + Math.random() * 3 });
 }
@@ -36,7 +38,7 @@ document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
 
 function update() {
-  if (gameOver || gameWin) return;
+  if (!gameRunning) return;
 
   // Movement
   if (keys["ArrowUp"]) player.y -= 3;
@@ -60,10 +62,12 @@ function update() {
   if (player.y + player.h > canvas.height) player.y = canvas.height - player.h;
 
   // Move cars
-  for (let car of cars) {
+  for (let i = cars.length - 1; i >= 0; i--) {
+    let car = cars[i];
     car.x += car.speed;
     if (car.x > canvas.width + 60) {
-      cars.splice(cars.indexOf(car), 1);
+      cars.splice(i, 1);
+      continue;
     }
 
     // Collision detection
@@ -86,6 +90,8 @@ function draw() {
   ctx.fillStyle = "#b0bec5";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  if (!gameRunning) return;
+
   // Player
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.w, player.h);
@@ -105,6 +111,7 @@ function loop() {
 
 function endGame(msg) {
   clearInterval(carInterval);
+  gameRunning = false;
   overlayMsg.textContent = msg;
   overlay.classList.remove("hidden");
 }
@@ -119,5 +126,5 @@ startBtn.addEventListener("click", () => {
   initGame();
 });
 
-// Start game loop sekali je
+// Loop jalan sekali sepanjang hidup
 loop();
