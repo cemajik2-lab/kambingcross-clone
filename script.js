@@ -8,16 +8,13 @@ const overlay = document.getElementById("overlay");
 const overlayMsg = document.getElementById("overlayMsg");
 const retryBtn = document.getElementById("retryBtn");
 const startBtn = document.getElementById("startBtn");
+const controls = document.getElementById("controls");
 
 let player, cars, keys, score, carInterval;
 let gameRunning = false;
 
-// load kambing sprite (kau boleh replace dengan file kambing.png sendiri)
-const goatImg = new Image();
-goatImg.src = "https://i.ibb.co/pPg9v9r/goat.png"; // contoh sprite free
-
 function initGame() {
-  player = { x: 180, y: 460, w: 40, h: 40 };
+  player = { x: 180, y: 460, w: 40, h: 40, color: "#0ff" };
   cars = [];
   keys = {};
   score = 0;
@@ -27,15 +24,13 @@ function initGame() {
   scoreText.textContent = "Score: " + score;
 
   if (carInterval) clearInterval(carInterval);
-  carInterval = setInterval(spawnCar, 1200);
+  carInterval = setInterval(spawnCar, 1500);
 }
 
 function spawnCar() {
   if (!gameRunning) return;
   const y = Math.random() * 400;
-  const colors = ["#ff00cc", "#00ffff", "#ffcc00", "#00ff00"];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  cars.push({ x: -60, y: y, w: 60, h: 30, speed: 2 + Math.random() * 3, color });
+  cars.push({ x: -60, y: y, w: 60, h: 30, speed: 2 + Math.random() * 3 });
 }
 
 document.addEventListener("keydown", e => keys[e.key] = true);
@@ -55,9 +50,7 @@ function update() {
     score++;
     player.y = 460;
     scoreText.textContent = "Score: " + score;
-    if (score >= 5) {
-      endGame("🎉 YEAY! Kau Menang! 🎉");
-    }
+    if (score >= 5) endGame("🎉 YEAY! Kau Menang! 🎉");
   }
   if (player.y + player.h > canvas.height) player.y = canvas.height - player.h;
 
@@ -83,29 +76,23 @@ function update() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Jalan neon
   ctx.fillStyle = "#111";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = "#0ff";
-  ctx.lineWidth = 2;
-  for (let i = 50; i < canvas.height; i += 80) {
-    ctx.beginPath();
-    ctx.moveTo(0, i);
-    ctx.lineTo(canvas.width, i);
-    ctx.stroke();
-  }
-
   if (!gameRunning) return;
 
-  // Player (kambing sprite)
-  ctx.drawImage(goatImg, player.x, player.y, player.w, player.h);
+  // Player (kambing neon)
+  ctx.fillStyle = player.color;
+  ctx.shadowColor = "#0ff";
+  ctx.shadowBlur = 20;
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+  ctx.shadowBlur = 0;
 
-  // Cars
+  // Cars (neon merah jahat)
   for (let car of cars) {
-    ctx.fillStyle = car.color;
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = car.color;
+    ctx.fillStyle = "#f0f";
+    ctx.shadowColor = "#f0f";
+    ctx.shadowBlur = 15;
     ctx.fillRect(car.x, car.y, car.w, car.h);
     ctx.shadowBlur = 0;
   }
@@ -124,15 +111,22 @@ function endGame(msg) {
   overlay.classList.remove("hidden");
 }
 
-retryBtn.addEventListener("click", () => {
-  initGame();
-});
-
+retryBtn.addEventListener("click", () => initGame());
 startBtn.addEventListener("click", () => {
   menu.classList.add("hidden");
   gameWrapper.classList.remove("hidden");
   initGame();
 });
 
-// run loop
+// 🎮 Mobile Controls
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMobile) {
+  controls.classList.remove("hidden");
+  document.querySelectorAll("#controls button").forEach(btn => {
+    btn.addEventListener("touchstart", () => keys[btn.dataset.key] = true);
+    btn.addEventListener("touchend", () => keys[btn.dataset.key] = false);
+  });
+}
+
+// Loop jalan sepanjang hidup
 loop();
