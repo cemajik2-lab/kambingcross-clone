@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  background: #7ec850; /* rumput */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+canvas {
+  background: #cfcfcf; /* jalan */
+  border: 4px solid black;
+}
