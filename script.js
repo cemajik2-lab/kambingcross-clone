@@ -1,27 +1,37 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Player
-const player = { x: 180, y: 460, w: 40, h: 40, color: "brown" };
+const menu = document.getElementById("menu");
+const gameWrapper = document.getElementById("gameWrapper");
+const scoreText = document.getElementById("scoreText");
+const overlay = document.getElementById("overlay");
+const overlayMsg = document.getElementById("overlayMsg");
+const retryBtn = document.getElementById("retryBtn");
+const startBtn = document.getElementById("startBtn");
 
-// Cars
-const cars = [];
+let player, cars, keys, score, gameOver, gameWin;
+
+function initGame() {
+  player = { x: 180, y: 460, w: 40, h: 40, color: "#795548" };
+  cars = [];
+  keys = {};
+  score = 0;
+  gameOver = false;
+  gameWin = false;
+  overlay.classList.add("hidden");
+  scoreText.textContent = "Score: " + score;
+}
+
 function spawnCar() {
   const y = Math.random() * 400;
   cars.push({ x: -60, y: y, w: 60, h: 30, speed: 2 + Math.random() * 3 });
 }
-setInterval(spawnCar, 1500);
 
-// Keys
-const keys = {};
 document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
 
-let score = 0;
-let gameOver = false;
-
 function update() {
-  if (gameOver) return;
+  if (gameOver || gameWin) return;
 
   // Movement
   if (keys["ArrowUp"]) player.y -= 3;
@@ -34,7 +44,13 @@ function update() {
   if (player.x + player.w > canvas.width) player.x = canvas.width - player.w;
   if (player.y < 0) {
     score++;
-    player.y = 460; // reset position lepas sampai atas
+    player.y = 460;
+    scoreText.textContent = "Score: " + score;
+
+    if (score >= 5) {
+      gameWin = true;
+      showOverlay("🎉 YEAY! Kau Menang! 🎉");
+    }
   }
   if (player.y + player.h > canvas.height) player.y = canvas.height - player.h;
 
@@ -53,6 +69,7 @@ function update() {
       player.y + player.h > car.y
     ) {
       gameOver = true;
+      showOverlay("💀 GAME OVER 💀");
     }
   }
 }
@@ -60,7 +77,11 @@ function update() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Player
+  // Jalan
+  ctx.fillStyle = "#b0bec5";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Player (kambing = coklat)
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.w, player.h);
 
@@ -68,17 +89,6 @@ function draw() {
   ctx.fillStyle = "red";
   for (let car of cars) {
     ctx.fillRect(car.x, car.y, car.w, car.h);
-  }
-
-  // Score
-  ctx.fillStyle = "black";
-  ctx.font = "20px Arial";
-  ctx.fillText("Score: " + score, 10, 20);
-
-  if (gameOver) {
-    ctx.fillStyle = "black";
-    ctx.font = "40px Arial";
-    ctx.fillText("GAME OVER", 90, 250);
   }
 }
 
@@ -88,4 +98,21 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
+function showOverlay(msg) {
+  overlayMsg.textContent = msg;
+  overlay.classList.remove("hidden");
+}
+
+retryBtn.addEventListener("click", () => {
+  initGame();
+});
+
+startBtn.addEventListener("click", () => {
+  menu.classList.add("hidden");
+  gameWrapper.classList.remove("hidden");
+  initGame();
+  setInterval(spawnCar, 1500);
+});
+
+// Start game loop
 loop();
