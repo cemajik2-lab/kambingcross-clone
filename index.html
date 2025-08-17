@@ -8,10 +8,10 @@
 </head>
 <body>
   <div id="menu">
-    <h1 class="neonTitle">🐐 KambingCross Neon 🛣️</h1>
-    <p class="subtitle">Bantu kambing cyberpunk melintas jalan tanpa kena langgar!</p>
-    <button id="startBtn">⚡ Mula Game ⚡</button>
-    <div class="howto glass">
+    <h1>🐐 KambingCross Neon 🛣️</h1>
+    <p>Bantu kambing melintas jalan tanpa kena langgar!</p>
+    <button id="startBtn">Mula Game</button>
+    <div class="howto">
       <h3>Cara Main:</h3>
       <ul>
         <li>⬆️ ⬇️ ⬅️ ➡️ untuk gerak</li>
@@ -24,12 +24,22 @@
 
   <div id="gameWrapper" class="hidden">
     <canvas id="gameCanvas" width="400" height="500"></canvas>
-    <div id="ui" class="glass">
+    <div id="ui">
       <p id="scoreText">Score: 0</p>
     </div>
-    <div id="overlay" class="hidden glass">
+    <div id="overlay" class="hidden">
       <h2 id="overlayMsg"></h2>
-      <button id="retryBtn">🔁 Main Lagi</button>
+      <button id="retryBtn">Main Lagi</button>
+    </div>
+  </div>
+
+  <!-- 🎮 Mobile Controls -->
+  <div id="controls" class="mobile-controls hidden">
+    <button data-key="ArrowUp">⬆️</button>
+    <div>
+      <button data-key="ArrowLeft">⬅️</button>
+      <button data-key="ArrowDown">⬇️</button>
+      <button data-key="ArrowRight">➡️</button>
     </div>
   </div>
 
