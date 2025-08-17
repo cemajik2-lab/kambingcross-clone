@@ -3,11 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KambingCross Clone</title>
+  <title>KambingCross Deluxe</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="gameCanvas" width="400" height="500"></canvas>
+  <div id="menu">
+    <h1>🐐 KambingCross Deluxe 🛣️</h1>
+    <p>Bantu kambing melintas jalan tanpa kena langgar!</p>
+    <button id="startBtn">Mula Game</button>
+    <div class="howto">
+      <h3>Cara Main:</h3>
+      <ul>
+        <li>⬆️ ⬇️ ⬅️ ➡️ untuk gerak</li>
+        <li>Elak kereta merah 🚗</li>
+        <li>Sampai atas dapat 1 mata</li>
+        <li>Dapat 5 mata = Menang 🎉</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="gameWrapper" class="hidden">
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    <div id="ui">
+      <p id="scoreText">Score: 0</p>
+    </div>
+    <div id="overlay" class="hidden">
+      <h2 id="overlayMsg"></h2>
+      <button id="retryBtn">Main Lagi</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
