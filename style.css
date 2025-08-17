@@ -1,13 +1,100 @@
 body {
   margin: 0;
-  background: #7ec850; /* rumput */
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(180deg, #8fd694, #e5f6df);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
+.hidden {
+  display: none;
+}
+
+#menu {
+  text-align: center;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  max-width: 400px;
+}
+
+#menu h1 {
+  margin-bottom: 10px;
+}
+
+#menu button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#menu button:hover {
+  background: #45a049;
+}
+
+#menu .howto {
+  text-align: left;
+  margin-top: 20px;
+}
+
+#gameWrapper {
+  position: relative;
+}
+
 canvas {
-  background: #cfcfcf; /* jalan */
-  border: 4px solid black;
+  border: 4px solid #333;
+  background: #a5a5a5; /* jalan */
+  border-radius: 10px;
+}
+
+#ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 18px;
+  color: black;
+  background: rgba(255,255,255,0.7);
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+#overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+}
+
+#overlay h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+#overlay button {
+  padding: 10px 20px;
+  background: #ff5722;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  color: white;
+}
+
+#overlay button:hover {
+  background: #e64a19;
 }
